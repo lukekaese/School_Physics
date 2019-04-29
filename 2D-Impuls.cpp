@@ -33,7 +33,7 @@ double eing(string b){
 
 // Berrechnung der X-Koordinate
 // Alte X-Koordinate, Geschwindigkeit in X-Richtung, Zeitintervall
-float x_koord(float x, float vx, float t){
+float koord(float x, float vx, float t){
 	float xn = x + (vx*t);
 	return xn;	
 }
@@ -91,6 +91,7 @@ int main(){
 	//initialisieren der datei
 	fstream f;
 	f.open("Test.csv", ios::out);
+	f << "Zeit; Körper 1 Koordinaten; Körper 2 Koordinaten;" << endl;
 	
 	greet();	
 	//Eingabe der Länge l und Breite b des Tisches
@@ -103,8 +104,8 @@ int main(){
     float index = 0;
     
     //X-Koord, Y-Koord, Masse, Radius, Geschwindigkeit der Körper 1 und 24
-	float k1[6] = {0, 0, eing("Masse K\224rper 1 in Kg"), eing("Radius K\224rper 1 in m"), eing("Geschwindigkeit K\224rper 1 in m/s"), impuls(k1[2],k1[4])};  
-	float k2[6] = {l, 0, eing("Masse K\224rper 2 in Kg"), eing("Radius K\224rper 2 in m"), eing("Geschwindigkeit K\224rper 2 in m/s"), impuls(k2[2],k2[4])};
+	float k1[6] = {0, 0, eing("Masse K\224rper 1 in Kg"), eing("Radius K\224rper 1 in m"), eing("Geschwindigkeit K\224rper 1 in m/s"), 0};  
+	float k2[6] = {l, 0, eing("Masse K\224rper 2 in Kg"), eing("Radius K\224rper 2 in m"), eing("Geschwindigkeit K\224rper 2 in m/s"), 0};
 	
 	//Versatz eingeben
 	float h = eing("Versatz vom mittelpunkt");  
@@ -115,43 +116,71 @@ int main(){
 		index = index + t; 						//Aufzählen des Zeitintervalls
 		
 		//Berrechnung der X-Koordinaten
-		k1[0]= x_koord(k1[0], k1[4], t);		
-		k2[0]= x_koord(k2[0], k2[4], t);
+		k1[0]= koord(k1[0], k1[4], t);		
+		k2[0]= koord(k2[0], k2[4], t);
+		
+		k1[1]= koord(k1[1], k1[5], t);		
+		k2[1]= koord(k2[1], k2[5], t);
+		
+		
 				
 			//Kollisionsabfrage
 			if (koll(k1[0], k1[1], k1[3], k2[0], k2[1], k2[3]) == true){
 				//cout << index << ", Kollision, " << k1[0] << ", "<< k2[0] <<endl;
 				//Aufteilung des Impulses
 					//impuls P1 und P2 und Beträge
+					cout << "Kollision" << endl;
 					float p1[2] = {k1[2]*k1[4],0};
 					float p2[2] = {k2[2]*k2[4],0};
 					float p1B = betr (p1[0], p1[1]);
 					float p2B = betr (p2[0], p2[1]);
 					
+					float p1_B = px(p1B, w);
+					float p2_B = px(p2B, w);
+					
 					//impuls P1_ und P2_ und Beträge
-					float p1_[2] = {px(p1B,w),py(p1B,w)};
-					float p2_[2] = {px(p2B,w),py(p2B,w)};
-					float p1_B = betr (p1_[0],p1_[1]);
-					float p2_B = betr (p2_[0],p2_[1]);
-				
-					//impuls P1__ und P2__ und Beträge
-					float p2__[2] = {px(p1_B,w),py(p1_B,w)};
-					float p2__[2] = {px(p2_B,w),py(p2_B,w)};
-					float p1__B = betr (p1__[0],p1__[1]);
-					float p2__B = betr (p2__[0],p2__[1]);
+					float p1_[2] = {px(p1_B,w),py(p1_B,w)};
+					float p2_[2] = {px(p2_B,w),py(p2_B,w)};
+					
+					float p1_1B = py(p1B, w);
+					float p2_1B = py(p2B, w);
+
+									
+					//impuls P1_1 und P2_1
+					float p1_1[2] = {px(p1_1B,w),py(p1_1B,w)};
+					float p2_1[2] = {px(p2_1B,w),py(p2_1B,w)};
+					
+					
 					
 					//Impulerhaltung Vektoraddition
-					float p_res[2] = {p1_[0]+p2_[0],p1[1]+p2[1]};
+					float p_res[2] = {p1_[0]+p2_[0], p1_[1]+p2_[1]};
 					
-					float p1Res[2] = {p_res[0] + p1__[0], p_res[1] + p1__[1]};
-					float p1Res[2] = {p_res[0] + p2__[0], p_res[1] + p2__[1]};
+					float p1Res[2] = {p_res[0] + p1_1[0], p_res[1] + p1_1[1]};
+					float p2Res[2] = {p_res[0] + p2_1[0], p_res[1] + p2_1[1]};
 					
+					//Geschwindigkeiten der Körper
+					//X-Richtung
+					k1[4]= p1Res[0]/k1[2];
+					k2[4]= p2Res[0]/k2[2];
 					
+					//Y-Richtung
+					k1[5]= p1Res[1]/k1[2];
+					k2[5]= p2Res[1]/k2[2];					
+									
 			}	
-	  	f << "Ausgabe des Textes" << endl; 
-		}
+		
+	  	
+		  
+	//	if (k1[0] > l || k2[0] < 0 || k1[1] > 0.5 || k1[1] < -0.5 || k2[1] > 0.5 || k2[1] < -0.5){
+	//		cout << "Limit erreicht nach " << index << " Sekunden" << endl;
+	//		break;
+	//	}
+	//	else {
+			f << index << "; (" << k1[0] << " | " << k1[1] << "); (" << k2[0] << " | " << k2[1] << "); "<< endl;
+	//	}
+			
+			
+		} 
+
 	f.close();
 	}
-
-
-
