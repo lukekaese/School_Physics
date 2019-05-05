@@ -90,8 +90,10 @@ float betr(float x, float y){
 int main(){
 	//initialisieren der datei
 	fstream f;
-	f.open("Test.csv", ios::out);
-	f << "Zeit; Körper 1 Koordinaten; Körper 2 Koordinaten;" << endl;
+	f.open("2dSym.csv", ios::out);
+	f << "Zeit; Körper 1 X-Koordinate; Körper 1 Y-Koordinate; Körper 2 X-Koordinaten; Körper 2 Y-Koordinaten;" << endl;
+	
+	bool marker = false;
 	
 	greet();	
 	//Eingabe der Länge l und Breite b des Tisches
@@ -125,10 +127,12 @@ int main(){
 		
 				
 			//Kollisionsabfrage
-			if (koll(k1[0], k1[1], k1[3], k2[0], k2[1], k2[3]) == true){
+			if (koll(k1[0], k1[1], k1[3], k2[0], k2[1], k2[3]) == true && marker == false){
 				//cout << index << ", Kollision, " << k1[0] << ", "<< k2[0] <<endl;
 				//Aufteilung des Impulses
 					//impuls P1 und P2 und Beträge
+					marker = true;
+					
 					cout << "Kollision" << endl;
 					float p1[2] = {k1[2]*k1[4],0};
 					float p2[2] = {k2[2]*k2[4],0};
@@ -171,13 +175,13 @@ int main(){
 		
 	  	
 		  
-	//	if (k1[0] > l || k2[0] < 0 || k1[1] > 0.5 || k1[1] < -0.5 || k2[1] > 0.5 || k2[1] < -0.5){
-	//		cout << "Limit erreicht nach " << index << " Sekunden" << endl;
-	//		break;
-	//	}
-	//	else {
-			f << index << "; (" << k1[0] << " | " << k1[1] << "); (" << k2[0] << " | " << k2[1] << "); "<< endl;
-	//	}
+		if (k1[0] > l || k2[0] < 0 || k1[1] > 0.5 || k1[1] < -0.5 || k2[1] > 0.5 || k2[1] < -0.5){
+			cout << "Eine Kugel hat den Rand nach " << index << " Sekunden erreicht" << endl;
+			break;
+		}
+		else {
+			f << index << "; " << k1[0] << "; " << k1[1] << "; " << k2[0] << "; " << k2[1] << "; "<< endl;
+		}
 			
 			
 		} 
