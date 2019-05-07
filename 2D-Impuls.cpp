@@ -143,8 +143,8 @@ int main(){
 					float p2_B = px(p2B, w);
 					
 					//impuls P1_ und P2_ und Beträge
-					float p1_[2] = {px(p1_B,w),py(p1_B,w)};
-					float p2_[2] = {px(p2_B,w),py(p2_B,w)};
+					float p1_[2] = {px(p1_B,w),-py(p1_B,w)};
+					float p2_[2] = {-px(p2_B,w),py(p2_B,w)};
 					
 					float p1_1B = py(p1B, w);
 					float p2_1B = py(p2B, w);
