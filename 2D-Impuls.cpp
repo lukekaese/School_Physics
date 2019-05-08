@@ -4,187 +4,222 @@
 #include <math.h>
 using namespace std;
 
-#define PI 3.14159265
 
-int greet(){
-	cout << "   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX " << endl;
-	cout << "   X  _____        ______                 ______       _________   ______       ______       ______      X "<< endl;
-	cout << "   X /_____/\\     /_____/\\               /_____/\\     /________/\\ /_____/\\     /_____/\\     /_____/\\     X " << endl;
-	cout << "   X \\:::_:\\ \\    \\:::_ \\ \\     _______  \\::::_\\/_    \\__.::.__\\/ \\:::_ \\ \\    \\::::_\\/_    \\::::_\\/_    X " << endl;
-	cout << "   X     _\\:\\|     \\:\\ \\ \\ \\   /______/\\  \\:\\/___/\\      \\::\\ \\    \\:\\ \\ \\ \\    \\:\\/___/\\    \\:\\/___/\\   X " << endl; 
-	cout << "   X    /::_/__     \\:\\ \\ \\ \\  \\__::::\\/   \\_::._\\:\\      \\::\\ \\    \\:\\ \\ \\ \\    \\_::._\\:\\    \\_::._\\:\\  X " << endl;
-	cout << "   X    \\:\\____/\\    \\:\\/.:| |               /____\\:\\      \\::\\ \\    \\:\\_\\ \\ \\     /____\\:\\     /____\\:\\ X " << endl;
-	cout << "   X     \\_____\\/     \\____/_/               \\_____\\/       \\__\\/     \\_____\\/     \\_____\\/     \\_____\\/ X " << endl;
-	cout << "   X                                                                                                     X " << endl;
-	cout << "   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX " << endl;
-	cout << "   X                                 BY RAPHAELA, TOBIAS, MANUEL, LUKAS                                  X " << endl;
-	cout << "   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX " << endl << endl;	
-}
+// KLASS DEFINITION
+	//vector definition
+struct vekt {
+	float x;
+	float y;	
+};
+	//body definition
+struct korp{
+	float mas;
+	float rad;
+	vekt ort;
+	vekt ges;
+	vekt imp;
+};
 
-double eing(string b){
-	double a;
-	cout << "   Bitte ";
-	cout << b;
-	cout << " eingeben: ";
-	cin >> a;
-	// cout << endl;
-	return a;
-}
-
-// Berrechnung der X-Koordinate
-// Alte X-Koordinate, Geschwindigkeit in X-Richtung, Zeitintervall
-float koord(float x, float vx, float t){
-	float xn = x + (vx*t);
-	return xn;	
-}
-
-//Kollisionsabfrage Vektroriell
-// X-Koord K1, Y-Koord K1, Radius K1, X-Koord K2, Y-Koord K2, Radius K2
-int koll(float x1, float y1, float r1, float x2, float y2, float r2){
+// FUNCTION DEFINITION AREA
 	
-	//Vektor K1K2 = OK2-OK1
-	//double vk1[2]={x1,y1}	//Vektor OK1 
-	//double vk2[2]={x2,y2}	//Vektor OK2
-	float vk2k1[2]={x1-x2,y1-y2};
+	//KOSMETIK AREA
+		//seperation line function
+		int sep(){
+			cout << "   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX " << endl;
+		}
+		//greetings-banner for use at the beguinning (sorry its in german)
+		int greet(){
+			sep();
+			cout << "   X  _____        ______                 ______       _________   ______       ______       ______      X "<< endl;
+			cout << "   X /_____/\\     /_____/\\               /_____/\\     /________/\\ /_____/\\     /_____/\\     /_____/\\     X " << endl;
+			cout << "   X \\:::_:\\ \\    \\:::_ \\ \\     _______  \\::::_\\/_    \\__.::.__\\/ \\:::_ \\ \\    \\::::_\\/_    \\::::_\\/_    X " << endl;
+			cout << "   X     _\\:\\|     \\:\\ \\ \\ \\   /______/\\  \\:\\/___/\\      \\::\\ \\    \\:\\ \\ \\ \\    \\:\\/___/\\    \\:\\/___/\\   X " << endl; 
+			cout << "   X    /::_/__     \\:\\ \\ \\ \\  \\__::::\\/   \\_::._\\:\\      \\::\\ \\    \\:\\ \\ \\ \\    \\_::._\\:\\    \\_::._\\:\\  X " << endl;
+			cout << "   X    \\:\\____/\\    \\:\\/.:| |               /____\\:\\      \\::\\ \\    \\:\\_\\ \\ \\     /____\\:\\     /____\\:\\ X " << endl;
+			cout << "   X     \\_____\\/     \\____/_/               \\_____\\/       \\__\\/     \\_____\\/     \\_____\\/     \\_____\\/ X " << endl;
+			cout << "   X                                                                                                     X " << endl;
+	    	sep();
+			cout << "   X                                 BY RAPHAELA, TOBIAS, MANUEL, LUKAS                                  X " << endl;
+			sep();
+			cout << endl;	
+		}
 	
+	//THE REAL FUNCTION AREA
+		//function for entering variables
+		int eing(string var){
+			float a;
+			cout << "   Please enter " << var << " : ";
+			cin >> a;
+			return a;
+		}
+		//function to calculate the current position
+		float pos( float ord, float ges, float t){	
+			float posi = ord + (ges*t);
+			return posi;
+		}
+		//function for the amont of a vector
+		float betr(vekt v){
+			return sqrt((pow(v.x,2)+pow(v.y,2)));
+		}
+		//function for the kollision detection
+		int koll( korp k1, korp k2){
+			//Vector Ok1 - Ok2 = k
+			vekt k;
+			k.x = k1.ort.x - k2.ort.x;
+			k.y = k1.ort.y - k2.ort.y;
+			//calculating the amount of vector k
+			float amk = betr(k);
+			//checking if there is a kollision
+			if (amk<=(k1.rad+k2.rad)){
+				return true;
+			}
+			else{
+				return false;
+			}			
+		}
 
-	//Betrag vk1k2
-	float istb = sqrt(pow(vk2k1[0], 2)+pow(vk2k1[1], 2));
-	
-	//Prüfung
-	float sollb = r1 + r2;
-	if (istb <= sollb){
-		return true;
-	}
-	else {
-		return false;
-	}				
-}
-
-float rad(float h, float r1, float r2){
-	float w = asin(h/(r1+r2))*180 / PI;
-	return w;	
-
-}
-
-float impuls(float m, float v){
-	float imp = m*v;
-	return imp;	
-}
-
-float px(float m, float w){
-	float px = m * cos(w);
-	return px;
-}
-float py(float m, float w){
-	float py = m* sin(w);
-	return py;
-}
-float betr(float x, float y){
-       float a = sqrt(pow(x, 2)+pow(y, 2));
-       return a;
-}
-
-	
-
+//MAINROUTINE
 int main(){
-	//initialisieren der datei
-	fstream f;
-	f.open("2dSym.csv", ios::out);
-	f << "Zeit; Körper 1 X-Koordinate; Körper 1 Y-Koordinate; Körper 2 X-Koordinaten; Körper 2 Y-Koordinaten;" << endl;
 	
-	bool marker = false;
-	
-	greet();	
-	//Eingabe der Länge l und Breite b des Tisches
-	float l = 2; 
-	float b = 1;
-	
-	//Eingabe der Gesamtdauer und des Zeitintervalls
-	int D = eing("Simmulationsdauer in Sekunden"); 	
-	float t = eing("Zeitintervalldauer in Sekunden"); 	
-    float index = 0;
-    
-    //X-Koord, Y-Koord, Masse, Radius, Geschwindigkeit der Körper 1 und 24
-	float k1[6] = {0, 0, eing("Masse K\224rper 1 in Kg"), eing("Radius K\224rper 1 in m"), eing("Geschwindigkeit K\224rper 1 in m/s"), 0};  
-	float k2[6] = {l, 0, eing("Masse K\224rper 2 in Kg"), eing("Radius K\224rper 2 in m"), eing("Geschwindigkeit K\224rper 2 in m/s"), 0};
-	
-	//Versatz eingeben
-	float h = eing("Versatz vom mittelpunkt");  
-	float w = rad(h,k1[3],k2[3]);
-
-	//Hauptschleife
-	while(index < D){
-		index = index + t; 						//Aufzählen des Zeitintervalls
+	//INITIALISATION 
 		
-		//Berrechnung der X-Koordinaten
-		k1[0]= koord(k1[0], k1[4], t);		
-		k2[0]= koord(k2[0], k2[4], t);
+		//initialising the CSV-File
+		fstream f;
+		f.open("2dSym.csv", ios::out);
+		//first line of the CSV-File
+		f<<"time; k1_x; k1_y; k2_x; k2_y;"<<endl;
+		//initialising greeting
+		greet();
 		
-		k1[1]= koord(k1[1], k1[5], t);		
-		k2[1]= koord(k2[1], k2[5], t);
+		//defining Variables
+			//definition of the area
+			int l = 2; //length
+			int b = 1; //width
+			//defining a flag for the kollision
+			bool flag = false;
+			//defining an index for the main loop
+			int index = 0;
 		
+	//IMPUT AREA
+		//setting the time
+		float dt = eing("the duration of the simulation in seconds");
+		float t = eing("the time interval");
+		//setting variables 
+		
+			//defining k1
+				cout << endl << "   DEFINING THE BODY OF K1" << endl;
+				korp k1;
+				//imput the body forms
+				k1.mas = eing("the mass of k1 in kg"); 			//mass of body k1
+				k1.rad = eing("the radius of k1 in m");			//radius of body k1
+				//setting the speed of k1
+				k1.ges.x = eing("the speed of k1 in m/s");
+				k1.ges.y = 0;
+				//seperation between imputs
+				cout << endl;
+				sep();
+				cout << endl;
+								
+			//defining k2
+				cout << "   DEFINING THE BODY OF K2" << endl; 
+				korp k2;
+				//imput the body forms
+				k2.mas = eing("the mass of k2 in kg");			//mass of body k2
+				k2.rad = eing("the radius of k2 in m");			//radius of body k1
+				//setting the speed of k2
+				k2.ges.x = eing("the speed of k1 in m/s");
+				k2.ges.y = 0;
+				//seperation between imputs
+				cout << endl;
+				sep();
+				cout << endl;
+			
+		//setting the hight difference
+		float h = eing ("the hight difference between two bodies in m");
+	
+	//CALCULATING location and impuls
+		//setting the location of the bodies
+		k1.ort.x = 0;
+		k1.ort.y = 0.5;
+		k2.ort.x = l;
+		k2.ort.y = 0.5-h;
+		//calculating the impuls
+		k1.imp.x = k1.ges.x * k1.mas;
+		k1.imp.y = k1.ges.y * k1.mas;
+		k2.imp.x = k2.ges.x * k2.mas;
+		k2.imp.y = k2.ges.y * k2.mas;
+		
+	//MAIN LOOP
+		while(index < dt){
+			//counting up the index
+			index = index + t;
+			
+			//calculate new coordinates
+				//k1 coordinates
+				k1.ort.x = pos(k1.ort.x, k1.ges.x, t);
+				k1.ort.y = pos(k1.ort.y, k1.ges.y, t);
+				//k2 coordinates
+				k2.ort.x = pos(k2.ort.x, k2.ges.x, t);
+				k2.ort.y = pos(k2.ort.y, k2.ges.y, t);
+						 
+							
+			//kollision detection
+			if (koll(k1,k2) == true ){
+				//setting the kollision-flag true
+				flag = true;
+				cout << "   Kollision"<< index <<endl;
+				float sina = (h/(k1.rad+k2.rad));
+				//splitting the vectors
+				vekt p1a, p1b, p2a, p2b;
+					//vector p1 = p1a + p1b				
+					p1b.y = pow(sina,2)*betr(k1.imp);
+					p1b.x = sqrt(pow(betr(k1.imp)*sina,2)-pow(p1b.y, 2));
+					//vectro p2 = p2a + p2b
+					p2b.y = -pow(sina,2)*betr(k2.imp);
+					p2b.x = -sqrt(pow(betr(k2.imp)*sina,2)-pow(p2b.y, 2));
+					//Vector p1-p1b = p1a
+					p1a.x = k1.imp.x-p1b.x;
+					p1a.y = k1.imp.y-p1b.y;
+					//Vector p2-p2b = p2a	
+					p2a.x = k2.imp.x-p2b.x;
+					p2a.y = k2.imp.y-p2b.y;
+					//constructing the resulting pa vektor
+					vekt pa;
+					pa.x = p1a.x + p2a.x;
+					pa.y = p1a.y + p2a.y;
+					//adding up the resulting vektor
+					k1.imp.x = pa.x + p1b.x;
+					k1.imp.y = pa.y + p1b.y;
+					k2.imp.x = pa.x + p2b.x;
+					k2.imp.y = pa.y + p2b.y;
+					//changing the velocety
+					k1.ges.x = (k1.imp.x/k1.mas);
+					k1.ges.y = (k1.imp.y/k1.mas);
+					k2.ges.x = (k2.imp.x/k2.mas);
+					k2.ges.y = (k2.imp.y/k2.mas); 
+			}
+			//Exit condition
+			if (k1.ort.x > l || k2.ort.x < 0 || k1.ort.y > b || k1.ort.y < 0 || k2.ort.y >b || k2.ort.y <0 ){
+				//exit message
+				cout << "   One of the bodies hit the edge of the table after " << index << " seconds"<<endl;
+				break;
+			}
+			else{
+				//saving the Data in a csv-document
+				float x1 = k1.ort.x;
+				cout <<index<<"; "<< x1 <<"; "<< k1.ort.y << "; "<< k2.ort.x <<"; "<< k2.ort.y <<"; "<<endl;
+			}
+		
+		}
 		
 				
-			//Kollisionsabfrage
-			if (koll(k1[0], k1[1], k1[3], k2[0], k2[1], k2[3]) == true && marker == false){
-				//cout << index << ", Kollision, " << k1[0] << ", "<< k2[0] <<endl;
-				//Aufteilung des Impulses
-					//impuls P1 und P2 und Beträge
-					marker = true;
-					
-					cout << "Kollision" << endl;
-					float p1[2] = {k1[2]*k1[4],0};
-					float p2[2] = {k2[2]*k2[4],0};
-					float p1B = betr (p1[0], p1[1]);
-					float p2B = betr (p2[0], p2[1]);
-					
-					float p1_B = px(p1B, w);
-					float p2_B = px(p2B, w);
-					
-					//impuls P1_ und P2_ und Beträge
-					float p1_[2] = {px(p1_B,w),-py(p1_B,w)};
-					float p2_[2] = {-px(p2_B,w),py(p2_B,w)};
-					
-					float p1_1B = py(p1B, w);
-					float p2_1B = py(p2B, w);
-
-									
-					//impuls P1_1 und P2_1
-					float p1_1[2] = {px(p1_1B,w),py(p1_1B,w)};
-					float p2_1[2] = {px(p2_1B,w),py(p2_1B,w)};
-					
-					
-					
-					//Impulerhaltung Vektoraddition
-					float p_res[2] = {p1_[0]+p2_[0], p1_[1]+p2_[1]};
-					
-					float p1Res[2] = {p_res[0] + p1_1[0], p_res[1] + p1_1[1]};
-					float p2Res[2] = {p_res[0] + p2_1[0], p_res[1] + p2_1[1]};
-					
-					//Geschwindigkeiten der Körper
-					//X-Richtung
-					k1[4]= p1Res[0]/k1[2];
-					k2[4]= p2Res[0]/k2[2];
-					
-					//Y-Richtung
-					k1[5]= p1Res[1]/k1[2];
-					k2[5]= p2Res[1]/k2[2];					
-									
-			}	
+				
 		
-	  	
-		  
-		if (k1[0] > l || k2[0] < 0 || k1[1] > 0.5 || k1[1] < -0.5 || k2[1] > 0.5 || k2[1] < -0.5){
-			cout << "Eine Kugel hat den Rand nach " << index << " Sekunden erreicht" << endl;
-			break;
-		}
-		else {
-			f << index << "; " << k1[0] << "; " << k1[1] << "; " << k2[0] << "; " << k2[1] << "; "<< endl;
-		}
+		
+		
 			
-			
-		} 
-
-	f.close();
-	}
+	
+	
+	
+	
+}
