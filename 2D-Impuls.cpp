@@ -46,7 +46,7 @@ struct korp{
 	
 	//THE REAL FUNCTION AREA
 		//function for entering variables
-		int eing(string var){
+		float eing(string var){
 			float a;
 			cout << "   Please enter " << var << " : ";
 			cin >> a;
