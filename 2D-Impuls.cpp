@@ -62,7 +62,7 @@ struct korp{
 			return sqrt((pow(v.x,2)+pow(v.y,2)));
 		}
 		//function for the kollision detection
-		int koll( korp k1, korp k2){
+		bool koll( korp k1, korp k2){
 			//Vector Ok1 - Ok2 = k
 			vekt k;
 			k.x = k1.ort.x - k2.ort.x;
