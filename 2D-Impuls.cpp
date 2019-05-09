@@ -4,17 +4,16 @@
 #include <math.h>
 using namespace std;
 
-
 // KLASS DEFINITION
 	//vector definition
 struct vekt {
-	float x;
-	float y;	
+	double x;
+	double y;	
 };
 	//body definition
 struct korp{
-	float mas;
-	float rad;
+	double mas;
+	double rad;
 	vekt ort;
 	vekt ges;
 	vekt imp;
@@ -46,19 +45,19 @@ struct korp{
 	
 	//THE REAL FUNCTION AREA
 		//function for entering variables
-		float eing(string var){
-			float a;
+		double eing(string var){
+			double a;
 			cout << "   Please enter " << var << " : ";
 			cin >> a;
 			return a;
 		}
 		//function to calculate the current position
-		float pos( float ord, float ges, float t){	
-			float posi = ord + (ges*t);
-			return posi;
+		double pos( double ord, double ges, double t){	
+		    ord = ord + (ges*t);
+			return ord;
 		}
 		//function for the amont of a vector
-		float betr(vekt v){
+		double betr(vekt v){
 			return sqrt((pow(v.x,2)+pow(v.y,2)));
 		}
 		//function for the kollision detection
@@ -68,7 +67,7 @@ struct korp{
 			k.x = k1.ort.x - k2.ort.x;
 			k.y = k1.ort.y - k2.ort.y;
 			//calculating the amount of vector k
-			float amk = betr(k);
+			double amk = betr(k);
 			//checking if there is a kollision
 			if (amk<=(k1.rad+k2.rad)){
 				return true;
@@ -102,8 +101,8 @@ int main(){
 		
 	//IMPUT AREA
 		//setting the time
-		float dt = eing("the duration of the simulation in seconds");
-		float t = eing("the time interval");
+		double dt = eing("the duration of the simulation in seconds");
+		double t = eing("the time interval");
 		//setting variables 
 		
 			//defining k1
@@ -135,14 +134,61 @@ int main(){
 				cout << endl;
 			
 		//setting the hight difference
-		float h = eing ("the hight difference between two bodies in m");
-	
+		double h = eing ("the hight difference between two bodies in m");
+		sep();
+		
+		//TROUBLESHOOTING THE IMPUT
+		while (true){
+			if(h<=(k1.rad+k2.rad) && k2.ges.x < 0 && k1.ges.x > 0 && k1.mas > 0 && k2.mas >0  && k1.rad > 0 && k2.rad > 0 && t > 0 ){
+				break;
+			}
+			else if(h>(k1.rad+k2.rad)){
+				cout << "   The entered hight difference is invalid the value has to be lower than: " << k1.rad+k2.rad << endl;
+				h = eing("the hight difference in m again");
+				cout << endl;
+			}
+			else if (k2.ges.x > 0){
+				cout << "   The entered speed of the body k2 has to be negativ" << endl;
+				k2.ges.x = eing("the speed of body k1 in m/s again");
+				cout << endl;
+			}
+			else if (k1.ges.x < 0){
+				cout << "   The entered speed of the body k1 has to be positiv" << endl;
+				k1.ges.x = eing("the speed of body k2 in m/s again");
+				cout << endl;				
+			}
+			else if (k1.mas <= 0){
+				cout << "   The entered mass of the body k1 has to be positiv" << endl;
+				k1.mas = eing("the mass of body k1 in kg again");
+				cout << endl;
+			}
+			else if (k2.mas <= 0){
+				cout << "   The entered mass of the body k2 has to be positiv" << endl;
+				k2.mas = eing("the mass of body k2 in kg again");
+				cout << endl;
+			}
+			else if (k1.rad <= 0){
+				cout << "   The entered radius of body k1 has to be bigger than zero" << endl;
+				k1.rad = eing("the radius of body k1 in m again");
+				cout << endl;
+			}
+			else if (k2.rad <= 0){
+				cout << "   The entered radius of body k2 has to be bigger than zero" << endl;
+				k2.rad = eing("the radius of body k2 in m again");
+				cout << endl;
+			}
+			else {
+				cout << "   The time intervall has to be bigger than zero" << endl;
+				t = eing("the time interval in s again");
+				cout << endl;
+			}			
+		}
 	//CALCULATING location and impuls
 		//setting the location of the bodies
 		k1.ort.x = 0;
-		k1.ort.y = 0.5;
+		k1.ort.y = (0.5*b);
 		k2.ort.x = l;
-		k2.ort.y = 0.5-h;
+		k2.ort.y = (0.5*b)-h;
 		//calculating the impuls
 		k1.imp.x = k1.ges.x * k1.mas;
 		k1.imp.y = k1.ges.y * k1.mas;
@@ -153,29 +199,19 @@ int main(){
 		while(index < dt){
 			//counting up the index
 			index = index + t;
-			
-			//calculate new coordinates
-				//k1 coordinates
-				k1.ort.x = pos(k1.ort.x, k1.ges.x, t);
-				k1.ort.y = pos(k1.ort.y, k1.ges.y, t);
-				//k2 coordinates
-				k2.ort.x = pos(k2.ort.x, k2.ges.x, t);
-				k2.ort.y = pos(k2.ort.y, k2.ges.y, t);
-						 
-							
 			//kollision detection
-			if (koll(k1,k2) == true ){
+			if (koll(k1,k2) == true && flag == false){
 				//setting the kollision-flag true
+				cout << "   kollision detectet after "<< index << " seconds"<< endl;
 				flag = true;
-				cout << "   Kollision"<< index <<endl;
-				float sina = (h/(k1.rad+k2.rad));
+				double sina = (h/(k1.rad+k2.rad));
 				//splitting the vectors
 				vekt p1a, p1b, p2a, p2b;
 					//vector p1 = p1a + p1b				
-					p1b.y = pow(sina,2)*betr(k1.imp);
+					p1b.y = pow(sina,2) * betr(k1.imp);
 					p1b.x = sqrt(pow(betr(k1.imp)*sina,2)-pow(p1b.y, 2));
 					//vectro p2 = p2a + p2b
-					p2b.y = -pow(sina,2)*betr(k2.imp);
+					p2b.y = -pow(sina,2) * betr(k2.imp);
 					p2b.x = -sqrt(pow(betr(k2.imp)*sina,2)-pow(p2b.y, 2));
 					//Vector p1-p1b = p1a
 					p1a.x = k1.imp.x-p1b.x;
@@ -196,9 +232,18 @@ int main(){
 					k1.ges.x = (k1.imp.x/k1.mas);
 					k1.ges.y = (k1.imp.y/k1.mas);
 					k2.ges.x = (k2.imp.x/k2.mas);
-					k2.ges.y = (k2.imp.y/k2.mas); 
+					k2.ges.y = (k2.imp.y/k2.mas); 		
 			}
+			//cout << k1.ges.x << " "<< k1.ges.y << " "<< k2.ges.x << " "<< k2.ges.y << endl;
+			//calculate new coordinates
+			//k1 coordinates
+			k1.ort.x = pos(k1.ort.x, k1.ges.x, t);
+			k1.ort.y = pos(k1.ort.y, k1.ges.y, t);
+			//k2 coordinates
+			k2.ort.x = pos(k2.ort.x, k2.ges.x, t);
+			k2.ort.y = pos(k2.ort.y, k2.ges.y, t);
 			//Exit condition
+			
 			if (k1.ort.x > l || k2.ort.x < 0 || k1.ort.y > b || k1.ort.y < 0 || k2.ort.y >b || k2.ort.y <0 ){
 				//exit message
 				cout << "   One of the bodies hit the edge of the table after " << index << " seconds"<<endl;
@@ -206,20 +251,7 @@ int main(){
 			}
 			else{
 				//saving the Data in a csv-document
-				float x1 = k1.ort.x;
-				cout <<index<<"; "<< x1 <<"; "<< k1.ort.y << "; "<< k2.ort.x <<"; "<< k2.ort.y <<"; "<<endl;
+				f <<index<<"; "<< k1.ort.x <<"; "<< k1.ort.y << "; "<< k2.ort.x <<"; "<< k2.ort.y <<"; "<<endl;
 			}
-		
 		}
-		
-				
-				
-		
-		
-		
-			
-	
-	
-	
-	
 }
