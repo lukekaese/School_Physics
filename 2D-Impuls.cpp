@@ -2,6 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+//#include <string>
+//#include <sstream>
+//#include <string.h>
 using namespace std;
 
 // KLASS DEFINITION
@@ -177,10 +180,13 @@ int main(){
 				k2.rad = eing("the radius of body k2 in m again");
 				cout << endl;
 			}
-			else {
+			else if (t <= 0) {
 				cout << "   The time intervall has to be bigger than zero" << endl;
 				t = eing("the time interval in s again");
 				cout << endl;
+			}
+			else {
+				break;
 			}			
 		}
 	//CALCULATING location and impuls
